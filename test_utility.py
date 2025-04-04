@@ -37,5 +37,27 @@ def feature_target_sample(housing_data_sample):
 
 def test_data_split(feature_target_sample):
     return_tuple = data_split(*feature_target_sample)
-    # TODO test if the length of return_tuple is 4
-    raise NotImplemented
+
+    # Check if the function returns a tuple of length 4
+    assert isinstance(return_tuple, tuple)
+    assert len(return_tuple) == 4
+
+    X_train, X_test, y_train, y_test = return_tuple
+
+    # Check if the training and testing dataframes are not empty
+    assert not X_train.empty
+    assert not X_test.empty
+    assert not y_train.empty
+    assert not y_test.empty
+
+    # Check if the number of rows in X + y matches the original sample
+    total_rows = len(feature_target_sample[0])
+    assert len(X_train) + len(X_test) == total_rows
+    assert len(y_train) + len(y_test) == total_rows
+
+    # Ensure feature and target indices align
+    assert set(X_train.index) == set(y_train.index)
+    assert set(X_test.index) == set(y_test.index)
+
+    # Ensure that feature column names match original
+    assert list(X_train.columns) == list(feature_target_sample[0].columns)
